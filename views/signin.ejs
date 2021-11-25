@@ -55,7 +55,7 @@
             <li><a href="/about">About</a></li>
             <li><a href="/blog">Blog</a></li>
             <li><a href="/contact">Contact</a></li>
-            <li><a href="/signup">Sign In</a></li>
+            <li><a href="/user">Sign In</a></li>
           </ul>
         </nav>
         <!-- //nav -->
@@ -74,11 +74,20 @@
             <div class="user signinBx">
               <div class="imgBx"><img src="https://images.unsplash.com/photo-1576859958081-27de5c70262a?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=687&q=80" /></div>
               <div class="formBx">
-                <form action="/signin" method="POST">
+                <form action="user/signin" method="POST">
                   <h2>Sign In</h2>
                   <input type="email" name="email" placeholder="Email" required />
-                  <input type="password" name="" placeholder="Password" required />
+                  <input type="password" name="password" placeholder="Password" required />
                   <input type="submit" name="" value="Login" />
+                  <p class="text-danger">
+                    <% if(error=='loginE'){ %>
+                    <%= 'This email does not exists.' %>
+                    <% }else if(error=='loginP'){%>
+                    <%= 'incorrect password.' %>
+                    <% }else{ %>
+                    <%= '' %>
+                    <% } %>
+                  </p>
                   <p class="signup">
                     Don't have an account ?<a href="#" onclick="toggleForm();">
                       Sign Up
@@ -89,7 +98,7 @@
             </div>
             <div class="user signupBx">
               <div class="formBx">
-                <form action="/signup" method="POST">
+                <form action="user/signup" method="POST">
                   <h2>Create an Account</h2>
                   <input type="text" name="username" placeholder="Username" required />
                   <input type="email" name="email" placeholder="Email" required />

@@ -1,47 +1,64 @@
-const mongoose = require('mongoose')
-const bcrypt = require('bcrypt')
-const jwt = require('jsonwebtoken')
+const mongoose = require('mongoose');
+const bcrypt = require('bcrypt');
 
 const UserSchema = new mongoose.Schema({
     username: {
         type: String,
-        required: true
+        required: true,
     },
     email: {
         type: String,
-        required: true
+        required: true,
     },
     password: {
         type: String,
-        required: true
+        required: true,
     },
-    tokens: [{
-        token: {
-            type: String,
-            required: true
-        }
-    }]
-})
+    token: {
+        type: String,
+    },
+});
 
 UserSchema.pre('save', async function(next) {
-    const user = this
+    const user = this;
 
     if (user.isModified('password')) {
-        user.password = await bcrypt.hash(user.password, 8)
+        user.password = await bcrypt.hash(user.password, 8);
     }
-    next()
-})
+    next();
+});
 
+// UserSchema.methods.generateAuthToken = async function() {
+//     const user = this;
 
-UserSchema.methods.generateAuthToken = async function() {
-    const user = this
+//     const token = jwt.sign({ _id: user._id.toString() },
+//         'tokenSecret', { expiresIn: '1 day' },
+//         (err, token) => {
+//             if (err) {
+//                 console.log(err);
+//             } else {
+//                 user.tokens = token;
+//             }
+//         }
+//     );
+//     console.log(token);
+//     console.log(user);
+//     // return token;
+// };
 
-    const token = jwt.sign({ _id: user._id.toString() }, 'tokenSecret')
+// UserSchema.statics.findByCredentials = async function(email, password) {
 
-    user.tokens = user.tokens.concat({ token })
-    await user.save()
+//     const user = await this.findOne({ email })
 
-    // return token
-}
+//     if (!user) { return res.render('signup', { error: 'login' }) }
 
-module.exports = mongoose.model('User', UserSchema)
+//     const isMatch = await bcrypt.compare(password, user.password)
+
+//     if (!isMatch) { return res.render('signup', { error: 'login' }) }
+
+//     console.log('successful login')
+//     res.redirect('/')
+//         // return user
+// }
+
+module.exports = mongoose.model('User', UserSchema);
